@@ -212,6 +212,7 @@ def test(data,
             Thread(target=plot_images, args=(img, output_to_target(output), paths, f, names), daemon=True).start()
 
     # Compute statistics
+    # FLAG(changing mAP)
     stats = [np.concatenate(x, 0) for x in zip(*stats)]  # to numpy
     if len(stats) and stats[0].any():
         p, r, ap, f1, ap_class = ap_per_class(*stats, plot=plots, save_dir=save_dir, names=names)
@@ -225,7 +226,7 @@ def test(data,
     pf = '%20s' + '%12.3g' * 6  # print format
     print(pf % ('all', seen, nt.sum(), mp, mr, map50, map))
 
-    # Print results per class
+    # Print results per class (Verbose)
     if verbose and nc > 1 and len(stats):
         for i, c in enumerate(ap_class):
             print(pf % (names[c], seen, nt[c], p[i], r[i], ap50[i], ap[i]))

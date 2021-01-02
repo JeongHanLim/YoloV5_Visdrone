@@ -252,10 +252,25 @@ def plot_study_txt(path='', x=None):  # from utils.plots import *; plot_study_tx
     ax2.legend(loc='lower right')
     plt.savefig('test_study.png', dpi=300)
 
+def class_average_size_jh(labels):
+    #c, b = labels[:, 0], labels[:, 1:].transpose()  # classes, boxes
+    #nc = int(c.max() + 1)  # number of classes
+    #colors = color_list()
+    #x = pd.DataFrame(b.transpose(), columns=['x', 'y', 'width', 'height'])
+    #x["size"] = x["width"]*x["height"]
+    labels_pd = pd.DataFrame(labels, columns = ['classes', 'x', 'y', 'width', 'height'])
+    labels_pd["size"] = labels_pd["width"] * labels_pd["height"] 
+    average = labels_pd.groupby(['classes']).mean()
+    print(average)
+
+
+    
+
 
 def plot_labels(labels, save_dir=Path(''), loggers=None):
     # plot dataset labels
     print('Plotting labels... ')
+    #class_average_size_jh(labels)
     c, b = labels[:, 0], labels[:, 1:].transpose()  # classes, boxes
     nc = int(c.max() + 1)  # number of classes
     colors = color_list()
@@ -375,6 +390,7 @@ def plot_results_overlay(start=0, stop=0):  # from utils.plots import *; plot_re
             ax[i].set_ylabel(f) if i == 0 else None  # add filename
         fig.savefig(f.replace('.txt', '.png'), dpi=200)
 
+#Execute from TRAINING. Gives Every result from epoch.
 
 def plot_results(start=0, stop=0, bucket='', id=(), labels=(), save_dir=''):
     # Plot training 'results*.txt'. from utils.plots import *; plot_results(save_dir='runs/train/exp')

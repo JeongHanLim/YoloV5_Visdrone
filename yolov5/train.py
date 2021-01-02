@@ -76,6 +76,10 @@ def train(hyp, opt, device, tb_writer=None, wandb=None):
     assert len(names) == nc, '%g names found for nc=%g dataset in %s' % (len(names), nc, opt.data)  # check
 
     # Model
+    #=====================================================
+    #   Get model by pretrained. If pretrained, try to attempt_download(google_utils)
+    #   Load checkpoint
+    #   
     pretrained = weights.endswith('.pt')
     if pretrained:
         with torch_distributed_zero_first(rank):

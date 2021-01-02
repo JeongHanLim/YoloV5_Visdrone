@@ -181,7 +181,9 @@ class ConfusionMatrix:
 
 # Plots ----------------------------------------------------------------------------------------------------------------
 
+#Execute from TEST. FOR our standard result, making mAP[0.5:0.95] are inserted
 def plot_pr_curve(px, py, ap, save_dir='.', names=()):
+    plot_pr_curve_mAP(px, py, ap, save_dir, names)
     fig, ax = plt.subplots(1, 1, figsize=(9, 6), tight_layout=True)
     py = np.stack(py, axis=1)
 
@@ -198,3 +200,27 @@ def plot_pr_curve(px, py, ap, save_dir='.', names=()):
     ax.set_ylim(0, 1)
     plt.legend(bbox_to_anchor=(1.04, 1), loc="upper left")
     fig.savefig(Path(save_dir) / 'precision_recall_curve.png', dpi=250)
+    
+
+
+#Execute from TEST. FOR our standard result, making mAP[0.5:0.95] are inserted
+def plot_pr_curve_mAP(px,py,ap, save_dir='.', names=()):
+    fig, ax = plt.subplots(1, 1, figsize=(9, 6), tight_layout=True)
+    py = np.stack(py, axis=1)
+
+
+    if 0 < len(names) < 21:  # show mAP in legend if < 10 classes
+        for i, y in enumerate(py.T):
+            print(ap[i, :])
+            ax.plot(px, y, linewidth=1, label=f'{names[i]} %.3f' % ap[i, :].mean(0))  # plot(recall, precision)
+    else:
+        ax.plot(px, py, linewidth=1, color='grey')  # plot(recall, precision)
+
+    ax.plot(px, py.mean(1), linewidth=3, color='blue', label='all classes %.3f mAP' % ap.mean())
+    ax.set_xlabel('Recall')
+    ax.set_ylabel('Precision')
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+    plt.legend(bbox_to_anchor=(1.04, 1), loc="upper left")
+    fig.savefig(Path(save_dir) / 'precision_recall_curve_mAP.png', dpi=250)
+
